@@ -1,0 +1,7 @@
+pin,name,state
+8,Red LED,off
+25,Green LED,off
+24,Blue LED,off
+10,RGB LED Red,on
+9,RGB LED Green,on
+11,RGB LED Blue,on

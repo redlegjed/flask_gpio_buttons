@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<head>
+   <title>GPIO Status</title>
+   <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+
+<body>
+   <h1>GPIO control Dashboard</h1>
+   
+   <p>
+   Turn GPIO pins on/off remotely
+   </p>
+   {% for pin in pins %}
+
+      {% if pins[pin].state==0 %}
+         <!-- Set colours for Off state -->
+         <button id = {{'pin%i' % pin}} class="button_off" onclick="pinToggle(this,{{pin}})"> {{pins[pin].name}} </button>
+      {% elif pins[pin].state==1 %}
+         <!-- Set colours for On state -->
+         <button id = {{'pin%i' % pin}} class="button_on" onclick="pinToggle(this,{{pin}})"> {{pins[pin].name}} </button>
+      {% endif %}
+
+   {% endfor %}
+   
+   <!-- <p>
+   <a href="/reboot"> REBOOT </a>
+   </p> -->
+
+   
+
+</body>
+</html>
+
+<script>
+   
+   function pinToggle(e,pin) {
+      // Toggle the GPIO state and Change button colour
+      
+      // Check state of pin by looking at which CSS class it contains
+      if (document.getElementById("pin"+pin).classList.contains('button_off'))
+      {
+         // Was in Off state going to On state
+         // - switch the CSS class
+         document.getElementById("pin"+pin).classList.remove('button_off');
+         document.getElementById("pin"+pin).classList.add('button_on');
+      }
+      else
+      {
+         // Was in On state going to Off state
+         document.getElementById("pin"+pin).classList.remove('button_on');
+         document.getElementById("pin"+pin).classList.add('button_off');
+      }
+
+      // Create request object and send to flask setpin() function 
+      // with the pin number
+      var xhttp = new XMLHttpRequest();  
+      xhttp.open("GET", "setpin/"+pin+"/toggle", true);
+      xhttp.send();
+
+
+   }
+
+   function ping(e,pin) {
+      // Debugging function for testing communication to 
+      // server
+
+      // Create request object
+      var xhttp = new XMLHttpRequest();  
+      xhttp.open("GET", "ping/"+pin, true);
+      xhttp.send();
+   }
+
+</script>
+
+

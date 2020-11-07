@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<head>
+   <title>MoCapPi Mission control</title>
+   <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+
+<body>
+   <h1>Motion Capture mission control</h1>
+
+   <!-- Camera preview display -->
+   <table>
+      <tr>
+          <th>Remote camera Left</th>
+          <th>Remote camera Right</th>
+      </tr>
+
+      <tr>
+          <td>
+              <iframe id='camLeft' src="http://{{ IP_left}}:8000/index.html" title="Remote camera Left" width="640" height="480">
+              </iframe>
+              <p>
+                Left camera: {{ IP_left}}
+              </p>
+              
+          </td>
+
+          <td>
+              <iframe id='camRight' src="http://{{ IP_right}}:8000/index.html" title="Remote camera Right" width="640" height="480">
+              </iframe>
+              <p>
+                Right camera: {{ IP_right }}
+              </p>
+              
+          </td>
+
+      </tr>
+
+  </table>
+
+  
+<!-- Remote control buttons -->
+<button id = 'preview' onclick="setPreview(this)">Preview</button>
+<button id = 'update' onclick="updateCameras(this)">Update</button>
+<button id='videomode' onclick="setVideoMode(this)">Video Mode</button>
+<button id='capture' onclick="setCapture(this)" >Capture</button>
+
+
+   
+<script>
+    // -----------------------------------------------------------------
+    //  Button functions
+    // -----------------------------------------------------------------
+    function updateCameras(e){
+        // Update camera displays
+        // See StackOverflow
+        // https://stackoverflow.com/questions/21937168/refresh-an-iframe-without-refreshing-the-entire-page
+        var iframe_camLeft = document.getElementById('camLeft');
+        iframe_camLeft.src = iframe_camLeft.src;
+
+        var iframe_camRight = document.getElementById('camRight');
+        iframe_camRight.src = iframe_camRight.src;
+
+        // document.getElementById('camLeft').contentDocument.location.reload(true);
+        // document.getElementById('camRight').contentDocument.location.reload(true);
+    }
+
+    function setPreview(e) {
+        // Change button colours
+        document.getElementById("preview").style.background='#AA0000';
+        document.getElementById("videomode").style.background='#4CAF50';
+
+        // Create request object
+        var xhttp = new XMLHttpRequest();  
+        xhttp.open("GET", "preview", true);
+        xhttp.send();
+
+
+    }
+
+    function setVideoMode(e) {
+        // Change button colours
+        document.getElementById("videomode").style.background='#AA0000';
+        document.getElementById("preview").style.background='#4CAF50';
+
+        // Create request object
+        var xhttp = new XMLHttpRequest();  
+        xhttp.open("GET", "videomode", true);
+        xhttp.send();
+    }
+
+    function setCapture(e) {
+        // Create request object
+        var xhttp = new XMLHttpRequest();  
+        xhttp.open("GET", "capture", true);
+        xhttp.send();
+    }
+
+</script>
+
+</body>
+</html>
